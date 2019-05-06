@@ -4,11 +4,14 @@
   "regions": ["iad1"],
   "builds": [
     { "src": "static/**", "use": "@now/static" },
-    { "src": "app.py", "use": "@now/python@canary", "config": { "maxLambdaSize": "9mb" } }
+    { "src": "*.py", "use": "@now/python@canary", "config": { "maxLambdaSize": "9mb" } }
   ],
   "routes": [
     { "src": "/static/(.*)", "dest": "static/$1" },
-    { "src": "/(.*)", "dest": "app.py" }
+    { "src": "/", "dest": "index.py" },
+    { "src": "/signup", "dest": "signup.py" },
+    { "src": "/settings", "dest": "settings.py" },
+    { "src": "/logout", "dest": "logout.py" }
   ],
   "env": {
     "DATABASE_URI": "@flaskex-db-uri",
