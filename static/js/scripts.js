@@ -1,5 +1,5 @@
 function message(status) {
-  const feedback = document.querySelector("#feedback");
+  const feedback = document.querySelector('#feedback');
   feedback.textContent = status;
   feedback.style.opacity = 1;
   setTimeout(() => {
@@ -7,53 +7,57 @@ function message(status) {
   }, 3000);
 }
 
+function post(url, data, callback) {
+	const formData = new FormData();
+	Object.keys(data).forEach(key => {
+		formData.append(key, data[key])
+	});
+	fetch(url, {
+		method: 'POST',
+		body: formData
+	})
+	.then(res => res.json())
+	.then(res => callback(res));
+}
+
 function login() {
-  $.post({
-    type: "POST",
-    url: "/",
-    data: {
-      "username": document.querySelector("#login-user").value,
-      "password": document.querySelector("#login-pass").value
-	},
-    success(response){
-      const { status } = JSON.parse(response);
-      if (status === "Login successful") { location.reload(); }
-      else { document.querySelector(".login-input").style.borderColor = '#E14448'; }
+  post('/',
+    {
+    'username': document.querySelector('#login-user').value,
+    'password': document.querySelector('#login-pass').value
+    },
+    (res) => {
+      if (res.status === 'Login successful') { location.reload(); }
+      else { document.querySelector('.login-input').style.borderColor = '#E14448'; }
     }
-  });
+  );
 }
 
 function signup() {
-  $.post({
-    type: "POST",
-    url: "/signup",
-    data: {
-      "username": document.querySelector("#signup-user").value,
-      "password": document.querySelector("#signup-pass").value,
-      "email": document.querySelector("#signup-mail").value
+  post('/signup',
+    {
+      'username': document.querySelector('#signup-user').value,
+      'password': document.querySelector('#signup-pass').value,
+      'email': document.querySelector('#signup-mail').value
     },
-    success(response) {
-      const { status } = JSON.parse(response);
-      if (status === "Signup successful") { location.reload(); }
-      else { message(status); }
+    (res) => {
+      if (res.status === 'Signup successful') { location.reload(); }
+      else { message(res.status); }
     }
-  });
+  );
 }
 
 function save() {
-  $.post({
-    type: "POST",
-    url: "/settings",
-    data: {
-      "username": document.querySelector("#settings-user").value,
-      "password": document.querySelector("#settings-pass").value,
-      "email": document.querySelector("#settings-mail").value
+  post('/settings',
+    {
+      'username': document.querySelector('#settings-user').value,
+      'password': document.querySelector('#settings-pass').value,
+      'email': document.querySelector('#settings-mail').value
     },
-    success(response) {
-      const { status } = JSON.parse(response);
-      message(status);
+    (res) => {
+      message(res.status);
     }
-  });
+  );
 }
 
 const loginButton = document.querySelector('#login-button');
@@ -72,8 +76,8 @@ if (saveButton) {
 
 //$(document).keypress((e) => {if(e.which === 13) {login();}});
 
-const burger = document.querySelector("#navbar-burger-id");
-const menu = document.querySelector("#navbar-menu-id");
+const burger = document.querySelector('#navbar-burger-id');
+const menu = document.querySelector('#navbar-menu-id');
 
 // Open or Close mobile & tablet menu
 // https://github.com/jgthms/bulma/issues/856
