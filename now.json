@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "name": "flaskex",
+  "regions": ["iad1"],
+  "builds": [
+    { "src": "static/**", "use": "@now/static" },
+    { "src": "app.py", "use": "@now/python@canary", "config": { "maxLambdaSize": "9mb" } }
+  ],
+  "routes": [
+    { "src": "/static/(.*)", "dest": "static/$1" },
+    { "src": "/(.*)", "dest": "app.py" }
+  ],
+  "env": {
+    "DATABASE_URI": "@flaskex-db-uri",
+    "SECRET_KEY": "@flaskex-secret-key"
+  }
+}

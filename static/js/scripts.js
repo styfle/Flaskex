@@ -1,71 +1,83 @@
-function message(status, shake=false, id="") {
-  if (shake) {
-    $("#"+id).effect("shake", {direction: "right", times: 2, distance: 8}, 250);
-  } 
-  document.getElementById("feedback").innerHTML = status;
-  $("#feedback").show().delay(2000).fadeOut();
+function message(status) {
+  const feedback = document.querySelector("#feedback");
+  feedback.textContent = status;
+  feedback.style.opacity = 1;
+  setTimeout(() => {
+    feedback.style.opacity = 0;
+  }, 3000);
 }
 
-function error(type) {
-  $("."+type).css("border-color", "#E14448");
-}
-
-var login = function() {
+function login() {
   $.post({
     type: "POST",
     url: "/",
-    data: {"username": $("#login-user").val(), 
-           "password": $("#login-pass").val()},
+    data: {
+      "username": document.querySelector("#login-user").value,
+      "password": document.querySelector("#login-pass").value
+	},
     success(response){
-      var status = JSON.parse(response)["status"];
+      const { status } = JSON.parse(response);
       if (status === "Login successful") { location.reload(); }
-      else { error("login-input"); }
+      else { document.querySelector(".login-input").style.borderColor = '#E14448'; }
     }
   });
-};
+}
 
-$(document).ready(function() {
-  
-  $(document).on("click", "#login-button", login);
-  $(document).keypress(function(e) {if(e.which === 13) {login();}});
-  
-  $(document).on("click", "#signup-button", function() {
-    $.post({
-      type: "POST",
-      url: "/signup",
-      data: {"username": $("#signup-user").val(), 
-             "password": $("#signup-pass").val(), 
-             "email": $("#signup-mail").val()},
-      success(response) {
-        var status = JSON.parse(response)["status"];
-        if (status === "Signup successful") { location.reload(); }
-        else { message(status, true, "signup-box"); }
-      }
-    });
+function signup() {
+  $.post({
+    type: "POST",
+    url: "/signup",
+    data: {
+      "username": document.querySelector("#signup-user").value,
+      "password": document.querySelector("#signup-pass").value,
+      "email": document.querySelector("#signup-mail").value
+    },
+    success(response) {
+      const { status } = JSON.parse(response);
+      if (status === "Signup successful") { location.reload(); }
+      else { message(status); }
+    }
   });
+}
 
-  $(document).on("click", "#save", function() {
-    $.post({
-      type: "POST",
-      url: "/settings",
-      data: {"username": $("#settings-user").val(), 
-             "password": $("#settings-pass").val(), 
-             "email": $("#settings-mail").val()},
-      success(response){
-        message(JSON.parse(response)["status"]);
-      }
-    });
+function save() {
+  $.post({
+    type: "POST",
+    url: "/settings",
+    data: {
+      "username": document.querySelector("#settings-user").value,
+      "password": document.querySelector("#settings-pass").value,
+      "email": document.querySelector("#settings-mail").value
+    },
+    success(response) {
+      const { status } = JSON.parse(response);
+      message(status);
+    }
   });
-});
+}
+
+const loginButton = document.querySelector('#login-button');
+const signupButton = document.querySelector('#signup-button');
+const saveButton = document.querySelector('#save');
+
+if (loginButton) {
+	loginButton.addEventListener('click', login);
+}
+if (signupButton) {
+  signupButton.addEventListener('click', signup);
+}
+if (saveButton) {
+  saveButton.addEventListener('click', save);
+}
+
+//$(document).keypress((e) => {if(e.which === 13) {login();}});
+
+const burger = document.querySelector("#navbar-burger-id");
+const menu = document.querySelector("#navbar-menu-id");
 
 // Open or Close mobile & tablet menu
 // https://github.com/jgthms/bulma/issues/856
-$("#navbar-burger-id").click(function () {
-  if($("#navbar-burger-id").hasClass("is-active")){
-    $("#navbar-burger-id").removeClass("is-active");
-    $("#navbar-menu-id").removeClass("is-active");
-  }else {
-    $("#navbar-burger-id").addClass("is-active");
-    $("#navbar-menu-id").addClass("is-active");
-  }
+burger.addEventListener('click', () => {
+  burger.classList.toggle('is-active');
+  menu.classList.toggle('is-active');
 });

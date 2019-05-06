@@ -27,3 +27,7 @@
 .settings-area {
   padding: 30px;
 }
+
+a:not(.button) {
+	text-decoration: underline;
+}

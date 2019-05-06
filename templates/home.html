@@ -2,7 +2,13 @@
 {% block body %}
 {% include "navbar.html" %}
 <section class="hero is-primary is-bold is-large">
-  <div class="hero-body"></div>
+  <div class="hero-body">
+	<div class="container has-text-centered">
+		<h1 class="title">Welcome {{user.username}}</h1>
+		<p>Thank you for trying out this Flaskex demo.</p>
+		<p>You can log out and log back in or change your <a href="./settings" class="has-text-dark has-text-weight-bold">profile settings</a>.</p>
+	</div>
+  </div>
 </section>
 {% endblock %}
 {% block scripts %}

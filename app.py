@@ -10,10 +10,8 @@ import os
 
 
 app = Flask(__name__)
+app.secret_key = os.environ['SECRET_KEY']
 
-
-# ======== Routing =========================================================== #
-# -------- Login ------------------------------------------------------------- #
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if not session.get('logged_in'):
@@ -39,7 +37,6 @@ def logout():
     return redirect(url_for('login'))
 
 
-# -------- Signup ---------------------------------------------------------- #
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if not session.get('logged_in'):
@@ -60,7 +57,6 @@ def signup():
     return redirect(url_for('login'))
 
 
-# -------- Settings ---------------------------------------------------------- #
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
     if session.get('logged_in'):
@@ -76,7 +72,5 @@ def settings():
     return redirect(url_for('login'))
 
 
-# ======== Main ============================================================== #
 if __name__ == "__main__":
-    app.secret_key = os.urandom(12)  # Generic key for dev purposes only
     app.run(debug=True, use_reloader=True)
