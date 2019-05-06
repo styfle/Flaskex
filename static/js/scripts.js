@@ -74,7 +74,17 @@ if (saveButton) {
   saveButton.addEventListener('click', save);
 }
 
-//$(document).keypress((e) => {if(e.which === 13) {login();}});
+for (let input of document.querySelectorAll('.login-input')) {
+	input.addEventListener('keypress', (e) => {
+    if (e.which === 13) login();
+	})
+}
+
+for (let input of document.querySelectorAll('.signup-input')) {
+	input.addEventListener('keypress', (e) => {
+    if (e.which === 13) signup();
+	})
+}
 
 const burger = document.querySelector('#navbar-burger-id');
 const menu = document.querySelector('#navbar-menu-id');
